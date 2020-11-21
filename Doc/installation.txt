@@ -41,3 +41,6 @@ pi@raspberrypi:~ $ cd ARDUINO/batcar_v4/RemoteControlInterface/
 pi@raspberrypi:~/ARDUINO/batcar_v4/RemoteControlInterface $ sudo python ./runRemoteControlInterface.py
 
 
+7/ Vidéo.
+
+https://www.youtube.com/watch?v=Of3ApHOewrY
