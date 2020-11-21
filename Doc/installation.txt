@@ -1,0 +1,43 @@
+Interface de commande en Python pour Batcar Arduino
+===================================================
+
+Distribution : Raspbian 
+Version : Linux raspberrypi 4.19.66-v7+ #1253 SMP Thu Aug 15 11:49:46 BST 2019 armv7l GNU/Linux
+Description: Raspbian GNU/Linux 9.13 (stretch)
+
+
+1/ Répertoire de travail.
+
+pi@raspberrypi:~ $ mkdir -p ARDUINO/Batcar
+pi@raspberrypi:~ $ cd ARDUINO/Batcar
+
+
+2/ Installation des paquetages.
+
+pi@raspberrypi:~/ARDUINO/Batcar $ sudo apt-get install python-pip python-dev
+pi@raspberrypi:~/ARDUINO/Batcar $ sudo pip install evdev
+pi@raspberrypi:~/ARDUINO/Batcar $ sudo apt-get install python-bluez
+pi@raspberrypi:~/ARDUINO/Batcar $ sudo apt-get install bluez-test-scripts
+
+
+3/ Redémarrer le Raspberry Pi.
+
+
+4/ Détection Bluetooth.
+
+Lancer l'application "blueman-manager" v2.0.4.
+
+
+5/ Connection Bluetooth au véhicule.
+
+Se connecter au port série : /dev/rfcomm0
+
+Le Grove Bluetooth clignote en bleu.
+
+
+6/ Lancement de la télécommande.
+
+pi@raspberrypi:~ $ cd ARDUINO/batcar_v4/RemoteControlInterface/
+pi@raspberrypi:~/ARDUINO/batcar_v4/RemoteControlInterface $ sudo python ./runRemoteControlInterface.py
+
+
