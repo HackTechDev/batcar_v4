@@ -5,42 +5,150 @@ Distribution : Raspbian
 Version : Linux raspberrypi 4.19.66-v7+ #1253 SMP Thu Aug 15 11:49:46 BST 2019 armv7l GNU/Linux
 Description: Raspbian GNU/Linux 9.13 (stretch)
 
+Lien : 
+https://howchoo.com/pi/bluetooth-raspberry-pi
+https://iotmyway.wordpress.com/2018/10/24/connecting-raspberry-pi-3-to-android-via-blueterm/
+https://www.raspberrypi.org/forums/viewtopic.php?t=125922
 
-1/ Répertoire de travail.
+
+1/ Installation des paquetages.
+
+pi@raspberrypi:~ $ sudo apt-get install python-pip python-dev
+pi@raspberrypi:~ $ sudo pip install evdev
+pi@raspberrypi:~ $ sudo apt-get install python-bluez bluez-test-scripts bluetooth pi-bluetooth bluez blueman
+
+
+2/ Répertoire de travail.
 
 pi@raspberrypi:~ $ mkdir -p ARDUINO/Batcar
 pi@raspberrypi:~ $ cd ARDUINO/Batcar
 
 
-2/ Installation des paquetages.
+3/ Vérification de la présence du Bluetooth.
 
-pi@raspberrypi:~/ARDUINO/Batcar $ sudo apt-get install python-pip python-dev
-pi@raspberrypi:~/ARDUINO/Batcar $ sudo pip install evdev
-pi@raspberrypi:~/ARDUINO/Batcar $ sudo apt-get install python-bluez
-pi@raspberrypi:~/ARDUINO/Batcar $ sudo apt-get install bluez-test-scripts
+pi@raspberrypi:~ $ hciconfig
+hci0:	Type: Primary  Bus: UART
+	BD Address: B8:27:EB:A8:84:FF  ACL MTU: 1021:8  SCO MTU: 64:1
+	UP RUNNING PSCAN 
+	RX bytes:3188 acl:0 sco:0 events:207 errors:0
+	TX bytes:5053 acl:0 sco:0 commands:164 errors:0
+
+pi@raspberrypi:~ $ 
 
 
-3/ Redémarrer le Raspberry Pi.
+4/ Lancement de l'interface en ligne de commande du Bluetooth.
+
+pi@raspberrypi:~ $ bluetoothctl
+[NEW] Controller B8:27:EB:A8:84:FF raspberrypi [default]
+[NEW] Device 00:18:A1:12:16:C5 Batcar
+[bluetooth]# 
 
 
-4/ Détection Bluetooth.
+5/ Activation.
+
+[bluetooth]# agent on
+Agent registered
+
+
+6/ Alimentation
+
+[bluetooth]# power on
+Changing power on succeeded
+
+
+7/ Scan. 
+
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller B8:27:EB:A8:84:FF Discovering: yes
+
+
+8/ Détection des périphériques Bluetooth.
+
+[bluetooth]# pair 00:18:A1:12:16:C5
+Attempting to pair with 00:18:A1:12:16:C5
+[CHG] Device 00:18:A1:12:16:C5 Connected: yes
+Request PIN code
+[agent] Enter PIN code: 6666
+[CHG] Device 00:18:A1:12:16:C5 UUIDs: 00001101-0000-1000-8000-00805f9b34fb
+[CHG] Device 00:18:A1:12:16:C5 ServicesResolved: yes
+[CHG] Device 00:18:A1:12:16:C5 Paired: yes
+Pairing successful
+[Batcar]# 
+
+
+9/ Quitter. 
+
+[bluetooth]# quit
+Agent unregistered
+[DEL] Controller B8:27:EB:A8:84:FF raspberrypi [default]
+pi@raspberrypi:~ $ 
+
+
+10/ Configuration.
+
+Ouvrir : 
+
+/etc/bluetooth/main.conf 
+
+Chercher : 
+
+[General]
+
+Ajouter après : 
+
+DisablePlugins = pnat
+
+
+11/ Redémarrer le Raspberry Pi.
+
+
+12/ Allumer la voiture.
+
+
+13/ Allumer le périphérique Bluetooth de la voiture : 
+
+Les voyants rouge et bleu s'allument alternativement.
+
+
+14/ Lancement de l'application de Bluetooth.
 
 Lancer l'application "blueman-manager" v2.0.4.
+Un 2ème icône Bluetooth apparaît en haut à droite : 
+Icône Bluetooth dans un rond blue.
 
 
-5/ Connection Bluetooth au véhicule.
+15/ Connection Bluetooth au véhicule.
 
-Se connecter au port série : /dev/rfcomm0
+- Cliquer sur le menu 'Rendre découvrable'
+- Cliquer sur le menu 'Périphériques...'
+    - Cliquer sur le bouton [Rechercher]
+- Sélectionner l'adatapteur Bluetooth correspond à la voiture
+- Cliquer sur l'étoile jaune pour faire confiance
+- Sur le périphérique Bluetooth, cliquer sur le bouton  droite de la souris : 
+   - Cliquer sur le menu [Serial Port] : 
+      Le message suivant s'affiche dans la barre de status en bas :         
+          Port série connecté à /dev/rfcomm0
 
 Le Grove Bluetooth clignote en bleu.
 
 
-6/ Lancement de la télécommande.
+16/ Téléchargement du code source de la télécommande.
 
-pi@raspberrypi:~ $ cd ARDUINO/batcar_v4/RemoteControlInterface/
-pi@raspberrypi:~/ARDUINO/batcar_v4/RemoteControlInterface $ sudo python ./runRemoteControlInterface.py
+pi@raspberrypi:~ $ cd ARDUINO/Batcar
+pi@raspberrypi:~/ARDUINO/Batcar $ git clone https://github.com/HackTechDev/batcar_v4.git
 
 
-7/ Vidéo.
+17/ Lancement de l'interface graphique de télécommande.
+
+pi@raspberrypi:~/ARDUINO/Batcar $ cd batcar_v4/RemoteControlInterface/
+pi@raspberrypi:~/ARDUINO/Batcar/batcar_v4/RemoteControlInterface $ 
+pi@raspberrypi:~/ARDUINO/batcar/batcar_v4/RemoteControlInterface $ sudo python ./runRemoteControlInterface.py
+
+
+18/ Vidéo.
 
 https://www.youtube.com/watch?v=Of3ApHOewrY
+
+
+
